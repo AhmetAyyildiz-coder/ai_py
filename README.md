@@ -45,3 +45,40 @@ JOIN
     Production.Product pr ON sod.ProductID = pr.ProductID;
 
 ```
+
+Senaryo 1: Belirli Bir Müşterinin Tüm Siparişlerini Getirme 
+```
+SELECT * 
+FROM ExtendedSalesOrderSummary
+WHERE CustomerID = 12345;  -- Örnek müşteri ID'si
+
+
+-- py kodu
+# Senaryo 1: Belirli bir müşterinin tüm siparişlerini getir
+customer_id = 12345  # Örnek müşteri ID'si
+cursor.execute(f"SELECT * FROM ExtendedSalesOrderSummary WHERE CustomerID = {customer_id}")
+rows = cursor.fetchall()
+
+# Verileri JSON formatına dönüştür
+customer_orders = []
+for row in rows:
+    customer_orders.append({
+        "SalesOrderID": row.SalesOrderID,
+        "OrderDate": str(row.OrderDate),
+        "CustomerID": row.CustomerID,
+        "FirstName": row.FirstName,
+        "LastName": row.LastName,
+        "ProductID": row.ProductID,
+        "ProductName": row.ProductName,
+        "OrderQty": row.OrderQty,
+        "UnitPrice": float(row.UnitPrice),
+        "LineTotal": float(row.LineTotal),
+        "OrderStatus": row.OrderStatus
+    })
+
+# JSON'u dosyaya kaydet (opsiyonel)
+with open("customer_orders.json", "w") as f:
+    json.dump(customer_orders, f, indent=4)
+
+print(f"Müşteri ID {customer_id} için siparişler: {json.dumps(customer_orders, indent=4)}")
+```
