@@ -45,7 +45,7 @@ JOIN
     Production.Product pr ON sod.ProductID = pr.ProductID;
 
 ```
-
+----------------------------
 Senaryo 1: Belirli Bir Müşterinin Tüm Siparişlerini Getirme 
 ```
 SELECT * 
@@ -82,3 +82,14 @@ with open("customer_orders.json", "w") as f:
 
 print(f"Müşteri ID {customer_id} için siparişler: {json.dumps(customer_orders, indent=4)}")
 ```
+
+
+Senaryo 2: Belirli Bir Tarih Aralığındaki Siparişleri Getirme
+
+
+
+`
+SELECT * 
+FROM ExtendedSalesOrderSummary
+WHERE OrderDate BETWEEN '2013-01-01' AND '2013-12-31';  -- Örnek tarih aralığı
+`
