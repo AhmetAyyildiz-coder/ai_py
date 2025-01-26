@@ -48,48 +48,84 @@ JOIN
 ----------------------------
 Senaryo 1: Belirli Bir Müşterinin Tüm Siparişlerini Getirme 
 ```
+# TSQL ile senaryo 1 nasıl yapılır?
 SELECT * 
 FROM ExtendedSalesOrderSummary
 WHERE CustomerID = 12345;  -- Örnek müşteri ID'si
 
+# AI kullanarak senaryo 1 nasıl yapılır?
+query = "Müşteri ID 12345'in tüm siparişlerini getir."
+# Doğal dil sorgusunu vektöre dönüştür
+query_vector = model.encode([query])
 
--- py kodu
-# Senaryo 1: Belirli bir müşterinin tüm siparişlerini getir
-customer_id = 12345  # Örnek müşteri ID'si
-cursor.execute(f"SELECT * FROM ExtendedSalesOrderSummary WHERE CustomerID = {customer_id}")
-rows = cursor.fetchall()
+# FAISS ile en yakın sonuçları bul
+k = 5  # En yakın 5 sonuç
+distances, indices = index.search(query_vector, k)
 
-# Verileri JSON formatına dönüştür
-customer_orders = []
-for row in rows:
-    customer_orders.append({
-        "SalesOrderID": row.SalesOrderID,
-        "OrderDate": str(row.OrderDate),
-        "CustomerID": row.CustomerID,
-        "FirstName": row.FirstName,
-        "LastName": row.LastName,
-        "ProductID": row.ProductID,
-        "ProductName": row.ProductName,
-        "OrderQty": row.OrderQty,
-        "UnitPrice": float(row.UnitPrice),
-        "LineTotal": float(row.LineTotal),
-        "OrderStatus": row.OrderStatus
-    })
+# Sonuçları göster
+for i in indices[0]:
+    print(f"Bulunan Kayıt: {texts[i]}")
 
-# JSON'u dosyaya kaydet (opsiyonel)
-with open("customer_orders.json", "w") as f:
-    json.dump(customer_orders, f, indent=4)
-
-print(f"Müşteri ID {customer_id} için siparişler: {json.dumps(customer_orders, indent=4)}")
 ```
-
+-----------------------------
 
 Senaryo 2: Belirli Bir Tarih Aralığındaki Siparişleri Getirme
 
+```
 
-
-`
+# senaryo 2 : TSQL ile nasıl yazılır?
 SELECT * 
 FROM ExtendedSalesOrderSummary
 WHERE OrderDate BETWEEN '2013-01-01' AND '2013-12-31';  -- Örnek tarih aralığı
-`
+
+
+# senaryo 2 : AI anlayacağı şekilde nasıl yazılır?
+query = "2013 yılında yapılan siparişleri getir."
+
+
+```
+---------------
+
+## Senaryo 3 : En Yüksek Toplam Tutara Sahip Siparişleri Getirme
+
+```
+# senaryo 3 : TSQL ile senaryo 3 nasıl yazılır?
+SELECT TOP 10 * 
+FROM ExtendedSalesOrderSummary
+ORDER BY LineTotal DESC;
+
+
+# senaryo 3 : AI ile nasıl sorgulanır?
+query = "En yüksek tutarlı siparişleri getir."
+
+```
+
+---------------------------------------------
+## Senaryo 4: Belirli Bir Ürünün Satış Bilgilerini Getirme
+
+```
+
+# TSQL
+SELECT * 
+FROM ExtendedSalesOrderSummary
+WHERE ProductID = 707;  -- Örnek ürün ID'si
+
+# AI
+query = "Ürün ID 707'nin satış bilgilerini getir."
+
+
+```
+------------------------------------------------------------
+
+## Senaryo 6: En Çok Sipariş Veren Müşterileri Bulma
+```
+# TSQL 
+SELECT TOP 5 CustomerID, FirstName, LastName, COUNT(*) AS OrderCount
+FROM ExtendedSalesOrderSummary
+GROUP BY CustomerID, FirstName, LastName
+ORDER BY OrderCount DESC;
+
+# AI
+query = "En çok sipariş veren müşterileri bul."
+
+```
