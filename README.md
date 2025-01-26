@@ -1,5 +1,5 @@
 Example 1 
-``
+```
 CREATE VIEW SalesOrderSummary AS
 SELECT 
     SOH.SalesOrderID,
@@ -13,7 +13,7 @@ FROM
     Sales.SalesOrderHeader SOH
 JOIN 
     Sales.SalesOrderDetail SOD ON SOH.SalesOrderID = SOD.SalesOrderID;
-``
+```
 
 
 
